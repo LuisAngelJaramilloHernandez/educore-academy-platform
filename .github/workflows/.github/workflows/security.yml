@@ -1,18 +1,26 @@
 name: Security Scan
 
+# 1. Cuándo se ejecuta: en push o pull request a la rama main
 on:
   push:
+    branches: [ "main" ]
   pull_request:
+    branches: [ "main" ]
 
 jobs:
   gitleaks:
+    name: Gitleaks Secret Detection
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Descargar codigo
+      # Paso A: Descarga el código del repositorio
+      - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Ejecutar Gitleaks
+      # Paso B: Ejecuta la herramienta Gitleaks
+      - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
